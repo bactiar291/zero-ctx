@@ -1,5 +1,20 @@
+<div align="center">
+
 # zero-ctx
 
+**Minimal MCP toolkit for low-token AI coding workflows**
+
+[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
+[![MCP](https://img.shields.io/badge/MCP-Compatible-brightgreen?style=flat-square)](https://modelcontextprotocol.io)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
+[![Zero Deps](https://img.shields.io/badge/Dependencies-Zero-success?style=flat-square)]()
+[![Token Reduction](https://img.shields.io/badge/Token%20Reduction-70--90%25-blue?style=flat-square)]()
+
+*Give the model less noise and more signal.*
+
+</div>
+
+---
 **Zero-dependency MCP server. 9 surgical tools. 90%+ token reduction.**
 
 Pure Python · No Rust · No setup hell · Works anywhere Python 3.9+ runs.
@@ -12,23 +27,26 @@ Most AI token waste comes from reading files you don't need, grepping output tha
 
 zero-ctx fixes that. Every tool has hard output caps and returns only what the model needs.
 
-| | zero-ctx | rtk | lean-ctx |
-|---|---|---|---|
-| Language | Python | Rust | Rust |
-| Zero deps | ✓ | ✓ | ✓ |
-| MCP tools | 9 | 0 | 57 |
-| Install | `pip install` | binary | binary |
-| Token reduction | 90%+ | 60–90% | 60–99% |
-| outline tool | ✓ | ✗ | ✗ |
-| write tool | ✓ | ✗ | ✗ |
-| Shell hook | ✗ | ✓ | ✓ |
+## Tools
 
+| Tool | Function | Estimated Token Savings |
+|---|---|---|
+| `zc_read` | Surgical file reading (lines/head/tail/around/auto) | ~85% vs full file reads |
+| `zc_stat` | File metadata without reading contents | ~99% vs full file reads |
+| `zc_grep` | Compact grep with capped matches | ~70% vs raw grep output |
+| `zc_find` | Path-only file discovery | ~90% vs raw find output |
+| `zc_diff` | Compact git diff with stripped noise | ~60% vs standard git diff |
+| `zc_run` | Command execution with compressed output | ~80% vs raw terminal logs |
+| `zc_patch` | Surgical string patching inside files | avoids full-file rewrites |
+| `zc_write` | Create or overwrite files directly | — |
+| `zc_tree` | Compact directory tree generation | ~90% vs verbose directory listings |
+| `zc_outline` | Symbol extraction without reading file bodies | ~95% vs full source reads |
 ---
 
 ## Install
 
 ```bash
-git clone https://github.com/yourname/zero-ctx
+git clone https://github.com/bactiar291/zero-ctx
 cd zero-ctx
 bash install.sh
 ```
@@ -36,7 +54,7 @@ bash install.sh
 Or directly:
 
 ```bash
-pip install git+https://github.com/yourname/zero-ctx
+pip install git+https://github.com/bactiar291/zero-ctx
 ```
 
 ---
