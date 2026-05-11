@@ -219,3 +219,7 @@ def main():
             pass
         else:
             respond(rid, error=f"method not found: {method}")
+
+
+if __name__ == "__main__":
+    main()

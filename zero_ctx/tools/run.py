@@ -1,8 +1,10 @@
 import subprocess
 import shlex
+import re
 
 MAX_TAIL = 30
 MAX_STDERR = 20
+ANSI_RE = re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
 
 
 def handle(args: dict) -> str:
@@ -25,10 +27,13 @@ def handle(args: dict) -> str:
     except Exception as e:
         return f"✗ {type(e).__name__}: {e}"
 
-    stdout_lines = r.stdout.splitlines()
+    stdout = ANSI_RE.sub("", r.stdout)
+    stderr = ANSI_RE.sub("", r.stderr)
+
+    stdout_lines = stdout.splitlines()
     skipped = max(0, len(stdout_lines) - MAX_TAIL)
     tail = stdout_lines[-MAX_TAIL:]
-    stderr = r.stderr.strip()
+    stderr = stderr.strip()
 
     parts = [f"exit={r.returncode}"]
     if skipped:

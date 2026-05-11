@@ -15,10 +15,9 @@ def handle(args: dict) -> str:
     modified = datetime.fromtimestamp(st.st_mtime).strftime("%Y-%m-%d %H:%M:%S")
 
     if path.is_file():
-        # Estimate line count cheaply
         try:
             with open(path, "rb") as f:
-                lines = f.read().count(b"\n")
+                lines = sum(chunk.count(b"\n") for chunk in iter(lambda: f.read(1024 * 1024), b""))
         except Exception:
             lines = -1
         size_str = _fmt_size(size)

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "zero-ctx"
 version = "2.0.0"
-description = "Zero-dependency MCP server: 9 surgical tools, 90%+ token reduction"
+description = "Zero-dependency MCP server: 10 surgical tools, 90%+ token reduction"
 requires-python = ">=3.9"
 dependencies = []
 

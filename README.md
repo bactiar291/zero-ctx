@@ -15,7 +15,7 @@
 </div>
 
 ---
-**Zero-dependency MCP server. 9 surgical tools. 90%+ token reduction.**
+**Zero-dependency MCP server. 10 surgical tools. 90%+ token reduction.**
 
 Pure Python · No Rust · No setup hell · Works anywhere Python 3.9+ runs.
 
@@ -170,7 +170,7 @@ Supports: Python, JS/TS, Go, Rust.
 
 ## Validate
 
-Test all 9 tools automatically:
+Test all 10 tools automatically:
 
 ```bash
 python validate.py
@@ -182,7 +182,7 @@ Expected output:
 zero-ctx validate  v2.0.0
 
   ✓ server handshake  zero-ctx
-  ✓ tools/list  9 tools registered
+  ✓ tools/list  10 tools registered
 
 zc_read
   ✓ auto mode (large file)

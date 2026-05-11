@@ -85,7 +85,8 @@ def main():
     tools_resp = rpc(proc, "tools/list")
     tools = [t["name"] for t in tools_resp["result"]["tools"]]
     expected = ["zc_read", "zc_grep", "zc_find", "zc_diff",
-                "zc_run", "zc_patch", "zc_write", "zc_tree", "zc_outline"]
+                "zc_run", "zc_patch", "zc_write", "zc_tree",
+                "zc_stat", "zc_outline"]
     missing = [t for t in expected if t not in tools]
     if missing:
         print(f"  {FAIL} tools/list  {DIM}missing: {missing}{RESET}")
@@ -121,11 +122,19 @@ def main():
         print(f"{BOLD}zc_find{RESET}")
         check(proc, "find *.py", "zc_find", {"pattern": "*.py", "path": tmp}, expect="sample.py")
         check(proc, "find *.rs (none)", "zc_find", {"pattern": "*.rs", "path": tmp}, expect="∅")
+        codex_dir = Path(tmp) / ".codex-99"
+        codex_dir.mkdir()
+        (codex_dir / "hidden.py").write_text("print('skip')\n")
+        check(proc, "skip .codex*", "zc_find", {"pattern": "*.py", "path": tmp},
+              expect="sample.py", not_expect="hidden.py")
         print()
 
         print(f"{BOLD}zc_run{RESET}")
         check(proc, "echo hello", "zc_run", {"cmd": "echo hello"}, expect="hello")
         check(proc, "exit code capture", "zc_run", {"cmd": "sh -c 'exit 1'"}, expect="exit=1")
+        check(proc, "strip ansi", "zc_run",
+              {"cmd": "python -c 'print(\"\\033[31mred\\033[0m\")'"},
+              expect="red", not_expect="\\033")
         check(proc, "timeout", "zc_run", {"cmd": "sleep 10", "timeout": 1}, expect="✗")
         print()
 
@@ -156,12 +165,20 @@ def main():
         check(proc, "missing path", "zc_tree", {"path": "/nonexistent"}, expect="✗")
         print()
 
+        print(f"{BOLD}zc_stat{RESET}")
+        check(proc, "file metadata", "zc_stat", {"path": tf}, expect="lines ~")
+        check(proc, "dir metadata", "zc_stat", {"path": tmp}, expect="dirs")
+        check(proc, "missing path", "zc_stat", {"path": "/nonexistent"}, expect="✗")
+        print()
+
         print(f"{BOLD}zc_outline{RESET}")
         check(proc, "python outline", "zc_outline", {"path": tf}, expect="class Foo")
         check(proc, "shows def baz", "zc_outline", {"path": tf}, expect="def baz")
         check(proc, "shows symbol count", "zc_outline", {"path": tf}, expect="symbols")
+        unknown = os.path.join(tmp, "x.unknown")
+        Path(unknown).write_text("not source\n")
         check(proc, "unsupported ext", "zc_outline",
-              {"path": os.path.join(tmp, "x.unknown")}, expect="✗")
+              {"path": unknown}, expect="unsupported")
         print()
 
         print(f"{BOLD}zc_diff{RESET}")

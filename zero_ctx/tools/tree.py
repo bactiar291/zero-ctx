@@ -1,8 +1,11 @@
+import fnmatch
 from pathlib import Path
 
 SKIP_DIRS = {"node_modules", "dist", "build", ".cache", "__pycache__",
              ".git", "coverage", ".next", "target", "venv", ".venv",
-             ".mypy_cache", ".pytest_cache", "*.egg-info"}
+             ".mypy_cache", ".pytest_cache", ".npm", ".pnpm-store",
+             ".cargo", ".rustup", ".local"}
+SKIP_GLOBS = {".codex*", "*.egg-info"}
 MAX_ENTRIES = 200
 
 
@@ -27,7 +30,7 @@ def handle(args: dict) -> str:
             return
 
         entries = [e for e in entries if show_hidden or not e.name.startswith(".")]
-        entries = [e for e in entries if e.name not in SKIP_DIRS and not e.name.endswith(".egg-info")]
+        entries = [e for e in entries if not _skip_entry(e.name)]
 
         for i, entry in enumerate(entries):
             if counter[0] >= MAX_ENTRIES:
@@ -47,3 +50,7 @@ def handle(args: dict) -> str:
         lines.append(f"[capped at {MAX_ENTRIES} entries]")
 
     return "\n".join(lines)
+
+
+def _skip_entry(name: str) -> bool:
+    return name in SKIP_DIRS or any(fnmatch.fnmatch(name, pat) for pat in SKIP_GLOBS)
