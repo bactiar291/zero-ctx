@@ -3,6 +3,9 @@ import sys
 import json
 from zero_ctx.tools import read, grep, find, diff, run, patch, write, tree, outline, stat
 
+sys.stdout.reconfigure(line_buffering=True)
+sys.stderr.reconfigure(line_buffering=True)
+
 TOOLS = [
     {
         "name": "zc_read",
